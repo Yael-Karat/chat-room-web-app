@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Group Chat</title>
+</head>
+<body>
+<h1>Create Group Chat</h1>
+<form action="#" th:action="@{/createGroupChat}" method="post">
+  <label>
+    Group Name:
+    <input type="text" name="groupName" required>
+  </label>
+  <label>
+    Select Users:
+    <ul>
+      <li th:each="user : ${users}">
+        <input type="checkbox" th:value="${user.id}" name="userIds" th:if="${user.id != currentUser.id}" th:text="${user.username}">
+      </li>
+    </ul>
+  </label>
+  <button type="submit">Create</button>
+</form>
+<div th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></div>
+<a href="/chatroom">Back to Chatroom</a>
+</body>
+</html>

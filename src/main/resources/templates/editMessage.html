@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Message</title>
+</head>
+<body>
+<h1>Edit Message</h1>
+<form th:action="@{/chat/{chatId}/message/{messageId}/edit(chatId=${message.chat.id}, messageId=${message.id})}" method="post">
+  <label>
+    New Message Content:
+    <input type="text" name="messageContent" th:value="${message.content}" required>
+  </label>
+  <button type="submit">Save</button>
+</form>
+<a th:href="@{/chat/{id}(id=${message.chat.id})}">Back to Chat</a>
+</body>
+</html>
