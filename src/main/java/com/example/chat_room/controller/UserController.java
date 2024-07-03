@@ -23,9 +23,17 @@ public class UserController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user, Model model) {
+        if (userService.usernameExists(user.getUsername())) {
+            String suggestedUsername = userService.suggestUsername(user.getUsername());
+            model.addAttribute("errorMessage", "Username already exists. Suggested username: " + suggestedUsername);
+            model.addAttribute("suggestedUsername", suggestedUsername);
+            return "register";
+        }
+
         userService.saveUser(user);
-        model.addAttribute("success", "User registered successfully!");
-        return "login";
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("success", true);
+        return "register";
     }
 
     @GetMapping("/login")

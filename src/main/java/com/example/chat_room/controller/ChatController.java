@@ -21,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class ChatController {
 
@@ -40,7 +42,8 @@ public class ChatController {
     public String showChatroom(@AuthenticationPrincipal UserDetails currentUser, Model model) {
         User user = userService.findByUsername(currentUser.getUsername());
         if (user == null) {
-            throw new RuntimeException("Authenticated user not found in the database");
+            System.err.println("Authenticated user not found in the database: " + currentUser.getUsername());
+            return "redirect:/login?error=userNotFound";
         }
 
         // Retrieve all chats where the user is a participant
@@ -79,7 +82,7 @@ public class ChatController {
     }
 
     @GetMapping("/chat/{id}")
-    public String showChat(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String showChat(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model, HttpSession session) {
         Optional<Chat> chatOptional = chatService.getChatById(id);
         if (chatOptional.isPresent()) {
             Chat chat = chatOptional.get();
@@ -93,6 +96,7 @@ public class ChatController {
             // Format timestamps and add to model
             List<Message> messages = chat.getMessages();
             List<Long> editableMessageIds = new ArrayList<>();
+            messages.sort(Comparator.comparing(Message::getTimestamp)); // Sort messages by timestamp
             for (Message message : messages) {
                 message.setFormattedTimestamp(message.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
                 readMessageService.markMessageAsRead(currentUser, message); // Mark message as read
@@ -101,10 +105,13 @@ public class ChatController {
                 }
             }
 
+            String draftMessage = (String) session.getAttribute("draftMessage_" + currentUser.getId() + "_" + chat.getId());
+
             model.addAttribute("chat", chat);
-            model.addAttribute("messages", chat.getMessages());
+            model.addAttribute("messages", messages);
             model.addAttribute("currentUser", currentUser); // Add this line to include currentUser in the model
             model.addAttribute("editableMessageIds", editableMessageIds); // Add list of editable message IDs
+            model.addAttribute("draftMessage", draftMessage); // Add draft message
             return "chat";
         } else {
             throw new RuntimeException("Chat not found");
@@ -113,7 +120,7 @@ public class ChatController {
 
     @PostMapping("/chat/{id}/send")
     public String sendMessage(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails,
-                              @RequestParam String messageContent, Model model) {
+                              @RequestParam String messageContent, Model model, HttpSession session) {
         Optional<Chat> chatOptional = chatService.getChatById(id);
 
         if (chatOptional.isPresent()) {
@@ -134,6 +141,12 @@ public class ChatController {
             message.setTimestamp(timestamp);
             chat.getMessages().add(message);
             chatService.save(chat);
+
+            session.removeAttribute("draftMessage_" + currentUser.getId() + "_" + chat.getId()); // Clear the draft message after sending
+
+            // Add script to clear local storage for this chat
+            model.addAttribute("chatId", chat.getId());
+            model.addAttribute("currentUserId", currentUser.getId());
 
             return "redirect:/chat/" + id;
         } else {
@@ -241,6 +254,7 @@ public class ChatController {
             }
 
             message.setContent(messageContent);
+            message.setEdited(true);  // Mark the message as edited
             messageService.save(message);
 
             return "redirect:/chat/" + chatId;
@@ -271,15 +285,6 @@ public class ChatController {
             }
         }
 
-        if (users.size() < 3) {
-            model.addAttribute("errorMessage", "A group chat must have at least 3 users.");
-            model.addAttribute("users", userService.findAllUsers().stream()
-                    .filter(u -> !u.getId().equals(user.getId()))
-                    .collect(Collectors.toList()));
-            model.addAttribute("currentUser", user); // Add currentUser to the model
-            return "createGroupChat";
-        }
-
         if (chatService.chatNameExists(groupName)) {
             String suggestedName = chatService.suggestAlternativeName(groupName);
             model.addAttribute("errorMessage", "Group chat name already exists. Suggested name: " + suggestedName);
@@ -291,11 +296,16 @@ public class ChatController {
         }
 
         chatService.createGroupChat(groupName, users);
-        return "redirect:/chatroom";
+        model.addAttribute("successMessage", "Group chat created successfully.");
+        model.addAttribute("users", userService.findAllUsers().stream()
+                .filter(u -> !u.getId().equals(user.getId()))
+                .collect(Collectors.toList()));
+        model.addAttribute("currentUser", user); // Add currentUser to the model
+        return "createGroupChat";
     }
 
     @GetMapping("/groupChat/{id}")
-    public String showGroupChat(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
+    public String showGroupChat(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model, HttpSession session) {
         Optional<Chat> chatOptional = chatService.getChatById(id);
         if (chatOptional.isPresent()) {
             Chat chat = chatOptional.get();
@@ -309,6 +319,7 @@ public class ChatController {
             // Format timestamps and add to model
             List<Message> messages = chat.getMessages();
             List<Long> editableMessageIds = new ArrayList<>();
+            messages.sort(Comparator.comparing(Message::getTimestamp)); // Sort messages by timestamp
             for (Message message : messages) {
                 message.setFormattedTimestamp(message.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
                 readMessageService.markMessageAsRead(currentUser, message); // Mark message as read
@@ -317,10 +328,13 @@ public class ChatController {
                 }
             }
 
+            String draftMessage = (String) session.getAttribute("draftMessage_" + currentUser.getId() + "_" + chat.getId());
+
             model.addAttribute("chat", chat);
-            model.addAttribute("messages", chat.getMessages());
+            model.addAttribute("messages", messages);
             model.addAttribute("currentUser", currentUser);
             model.addAttribute("editableMessageIds", editableMessageIds); // Add list of editable message IDs
+            model.addAttribute("draftMessage", draftMessage); // Add draft message
             return "chat"; // This should match the name of your chat view template
         } else {
             throw new RuntimeException("Chat not found");
