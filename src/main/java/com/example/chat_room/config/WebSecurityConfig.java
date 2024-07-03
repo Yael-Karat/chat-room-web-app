@@ -7,10 +7,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    private final CustomLoginRedirectFilter customLoginRedirectFilter;
+
+    public WebSecurityConfig(CustomLoginRedirectFilter customLoginRedirectFilter) {
+        this.customLoginRedirectFilter = customLoginRedirectFilter;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -32,10 +39,11 @@ public class WebSecurityConfig {
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutSuccessUrl("/login")
                         .permitAll()
                 )
-                .csrf(AbstractHttpConfigurer::disable); // Disable CSRF protection for simplicity in development
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection for simplicity in development
+                .addFilterBefore(customLoginRedirectFilter, UsernamePasswordAuthenticationFilter.class); // Add custom filter
 
         return http.build();
     }
