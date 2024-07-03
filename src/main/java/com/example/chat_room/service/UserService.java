@@ -50,12 +50,22 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-//    public Iterable<User> findAllUsersExcludingCurrent(User currentUser) {
-//        return userRepository.findAllByUsernameNot(currentUser.getUsername());
-//    }
+    public boolean usernameExists(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
+    public String suggestUsername(String username) {
+        String suggestedUsername;
+        int counter = 1;
+        do {
+            suggestedUsername = username + counter;
+            counter++;
+        } while (usernameExists(suggestedUsername));
+        return suggestedUsername;
+    }
 
     public List<User> findAllUsers() {
-        return (List<User>)userRepository.findAll();
+        return (List<User>) userRepository.findAll();
     }
 
     public User findById(Long id) {
