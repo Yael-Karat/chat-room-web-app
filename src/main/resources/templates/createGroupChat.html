@@ -3,25 +3,125 @@
 <head>
   <meta charset="UTF-8">
   <title>Create Group Chat</title>
+  <link href="/css/styles.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      background-image: url('/images/background.jpg'); /* Adjust the path to your background image */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    .create-container {
+      max-width: 600px;
+      margin: 100px auto;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-label {
+      font-weight: bold;
+    }
+
+    .btn-custom {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .success-message {
+      color: green;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      font-size: x-large;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #3498db;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      margin: 10px auto;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+  </style>
 </head>
 <body>
-<h1>Create Group Chat</h1>
-<form action="#" th:action="@{/createGroupChat}" method="post">
-  <label>
-    Group Name:
-    <input type="text" name="groupName" required>
-  </label>
-  <label>
-    Select Users:
-    <ul>
-      <li th:each="user : ${users}">
-        <input type="checkbox" th:value="${user.id}" name="userIds" th:if="${user.id != currentUser.id}" th:text="${user.username}">
-      </li>
-    </ul>
-  </label>
-  <button type="submit">Create</button>
-</form>
-<div th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;"></div>
-<a href="/chatroom">Back to Chatroom</a>
+<div class="container create-container">
+  <h1 class="text-center mb-4">Create Group Chat</h1>
+  <form action="#" th:action="@{/createGroupChat}" method="post">
+    <div class="mb-3">
+      <label for="groupName" class="form-label">Group Name:</label>
+      <input type="text" id="groupName" name="groupName" class="form-control" required oninput="saveDraftGroupName()">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Select Users:</label>
+      <ul class="list-group">
+        <li th:each="user : ${users}" class="list-group-item">
+          <input type="checkbox" th:value="${user.id}" name="userIds" th:if="${user.id != currentUser.id}" onchange="checkSelectedUsers()">
+          <span th:text="${user.username}"></span>
+        </li>
+      </ul>
+    </div>
+    <button type="submit" class="btn btn-primary btn-custom" id="createBtn" disabled>Create</button>
+  </form>
+  <button onclick="window.location.href='/chatroom'" class="btn btn-secondary btn-custom">Back to Chatroom</button>
+  <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+  <div th:if="${successMessage}" class="success-message" th:text="${successMessage}"></div>
+  <div th:if="${successMessage}" class="loader"></div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    loadDraftGroupName();
+    checkSelectedUsers();
+    if ($('.success-message').length) {
+      setTimeout(function() {
+        clearSessionStorage();
+        window.location.href = '/chatroom';
+      }, 1800); // Redirect after 1.8 seconds
+    }
+  });
+
+  function checkSelectedUsers() {
+    const selectedUsers = $('input[name="userIds"]:checked').length;
+    $('#createBtn').prop('disabled', selectedUsers < 2);
+  }
+
+  function saveDraftGroupName() {
+    const groupName = document.getElementById('groupName').value;
+    sessionStorage.setItem('draftGroupName', groupName);
+  }
+
+  function loadDraftGroupName() {
+    const draftGroupName = sessionStorage.getItem('draftGroupName');
+    if (draftGroupName) {
+      document.getElementById('groupName').value = draftGroupName;
+    }
+  }
+
+  function clearSessionStorage() {
+    sessionStorage.removeItem('draftGroupName');
+  }
+</script>
 </body>
 </html>

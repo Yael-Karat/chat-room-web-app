@@ -35,7 +35,7 @@
   <form th:action="@{/register}" method="post">
     <div class="mb-3">
       <label for="username" class="form-label">Username</label>
-      <input type="text" id="username" name="username" class="form-control" required>
+      <input type="text" id="username" name="username" class="form-control" th:value="${suggestedUsername}" required>
     </div>
     <div class="mb-3">
       <label for="password" class="form-label">Password</label>
@@ -45,5 +45,57 @@
   </form>
   <button onclick="window.location.href='/'" class="btn btn-secondary w-100 mt-3">Back to Home</button>
 </div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">Registration Successful</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Successful Registration. Welcome <span th:text="${username}">User</span>!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='/login'">Go to Login</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Registration Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <span th:text="${errorMessage}">Error</span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function() {
+    // Check if there is a success message
+    if ([[${success}]] === true) {
+      $('#successModal').modal('show');
+    }
+
+    // Check if there is an error message
+    if ([[${errorMessage != null}]] === true) {
+      $('#errorModal').modal('show');
+    }
+  });
+  /*]]>*/
+</script>
 </body>
 </html>
