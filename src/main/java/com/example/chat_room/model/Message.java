@@ -35,6 +35,8 @@ public class Message {
     @Transient
     private String formattedTimestamp;
 
+    private boolean edited;
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -88,7 +90,6 @@ public class Message {
         return likes.size();
     }
 
-    // Getters and setters for formattedTimestamp
     public String getFormattedTimestamp() {
         return formattedTimestamp;
     }
@@ -97,12 +98,12 @@ public class Message {
         this.formattedTimestamp = formattedTimestamp;
     }
 
-    // Constructors
-    public Message() {
+    public boolean isEdited() {
+        return edited;
     }
 
-    public boolean isSender(User user) {
-        return this.sender.equals(user);
+    public void setEdited(boolean edited) {
+        this.edited = edited;
     }
 
     // Override toString for better logging and debugging
@@ -114,6 +115,7 @@ public class Message {
                 ", sender=" + sender +
                 ", content='" + content + '\'' +
                 ", timestamp=" + timestamp +
+                ", edited=" + edited +
                 '}';
     }
 }
