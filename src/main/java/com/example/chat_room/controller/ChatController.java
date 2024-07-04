@@ -11,6 +11,7 @@ import com.example.chat_room.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.example.chat_room.service.UserStatusService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,9 @@ public class ChatController {
 
     @Autowired
     private ReadMessageService readMessageService;
+
+    @Autowired
+    private UserStatusService userStatusService;
 
     @GetMapping("/chatroom")
     public String showChatroom(@AuthenticationPrincipal UserDetails currentUser, Model model) {
@@ -78,6 +82,7 @@ public class ChatController {
         model.addAttribute("privateChats", privateChats);
         model.addAttribute("groupChats", groupChats);
         model.addAttribute("unreadMessagesCount", unreadMessagesCount);
+        model.addAttribute("userStatusService", userStatusService); // Added userStatusService to the model
         return "chatroom";
     }
 
@@ -96,10 +101,10 @@ public class ChatController {
             // Format timestamps and add to model
             List<Message> messages = chat.getMessages();
             List<Long> editableMessageIds = new ArrayList<>();
-            messages.sort(Comparator.comparing(Message::getTimestamp)); // Sort messages by timestamp
+            messages.sort(Comparator.comparing(Message::getTimestamp)); // Sorted messages by timestamp
             for (Message message : messages) {
                 message.setFormattedTimestamp(message.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
-                readMessageService.markMessageAsRead(currentUser, message); // Mark message as read
+                readMessageService.markMessageAsRead(currentUser, message); // Marked message as read
                 if (message.getSender().equals(currentUser) && Duration.between(message.getTimestamp(), LocalDateTime.now()).toMinutes() < 2) {
                     editableMessageIds.add(message.getId());
                 }
@@ -112,6 +117,7 @@ public class ChatController {
             model.addAttribute("currentUser", currentUser); // Add this line to include currentUser in the model
             model.addAttribute("editableMessageIds", editableMessageIds); // Add list of editable message IDs
             model.addAttribute("draftMessage", draftMessage); // Add draft message
+            model.addAttribute("userStatusService", userStatusService);
             return "chat";
         } else {
             throw new RuntimeException("Chat not found");
