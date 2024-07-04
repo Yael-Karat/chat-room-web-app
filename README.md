@@ -42,7 +42,7 @@ Our Chat Room application is a web-based chat platform built using the Spring Bo
 - *Draft group chat name*: The application tracks the input when the user is typing the group chat name and stores it and retrieves it whenever the user returns to create a group chat.
 
 ### 6. Session Management
-- *Session Storage*: The application uses session storage to manage user data and session information securely - tracks the input when the user is typing the group chat name and stores it and retrieves it whenever the user returns to create a group chat..
+- *Session Storage*: The application uses session storage to manage user data and session information securely - tracks the input when the user is typing the group chat name and stores it and retrieves it whenever the user returns to create a group chat.
 
 ### 7. Security and Access Control
 - *Authentication*: Spring Security is used to authenticate users - each registered user has a unique username and successful log in is when username and password (stored in the DB) match.
