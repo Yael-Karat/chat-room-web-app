@@ -297,7 +297,7 @@ public class ChatController {
             }
 
             message.setContent(messageContent);
-            message.setEdited(true);  // Mark the message as edited
+            message.setEdited(true);  // Marking the message as edited
             messageService.save(message);
 
             return "redirect:/chat/" + chatId;
@@ -319,7 +319,7 @@ public class ChatController {
         model.addAttribute("users", userService.findAllUsers().stream()
                 .filter(u -> !u.getId().equals(user.getId()))
                 .collect(Collectors.toList()));
-        model.addAttribute("currentUser", user); // Add currentUser to the model
+        model.addAttribute("currentUser", user); // Adding currentUser to the model
         return "createGroupChat";
     }
 
@@ -350,7 +350,7 @@ public class ChatController {
             model.addAttribute("users", userService.findAllUsers().stream()
                     .filter(u -> !u.getId().equals(user.getId()))
                     .collect(Collectors.toList()));
-            model.addAttribute("currentUser", user); // Add currentUser to the model
+            model.addAttribute("currentUser", user); // Adding currentUser to the model
             return "createGroupChat";
         }
 
@@ -359,7 +359,7 @@ public class ChatController {
         model.addAttribute("users", userService.findAllUsers().stream()
                 .filter(u -> !u.getId().equals(user.getId()))
                 .collect(Collectors.toList()));
-        model.addAttribute("currentUser", user); // Add currentUser to the model
+        model.addAttribute("currentUser", user); // Adding currentUser to the model
         return "createGroupChat";
     }
 

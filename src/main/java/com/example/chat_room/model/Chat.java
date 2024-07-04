@@ -71,7 +71,7 @@ public class Chat {
         return users.stream().filter(user -> !user.equals(currentUser)).findFirst().orElse(null);
     }
 
-    // Override toString for better logging and debugging
+    // Overriding toString for better logging and debugging
     @Override
     public String toString() {
         return "Chat{" +

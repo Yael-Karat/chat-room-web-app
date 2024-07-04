@@ -48,8 +48,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/css/**", "/images/**", "/js/**").permitAll() // Allow access to static resources
-                        .requestMatchers("/", "/login", "/register").permitAll() // Allow access to log in and register pages
+                        .requestMatchers("/css/**", "/images/**", "/js/**").permitAll() // Allowing access to static resources
+                        .requestMatchers("/", "/login", "/register").permitAll() // Allowing access to log in and register pages
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form

@@ -109,7 +109,7 @@ public class Message {
         this.edited = edited;
     }
 
-    // Override toString for better logging and debugging
+    // Overriding toString for better logging and debugging
     @Override
     public String toString() {
         return "Message{" +
