@@ -10,12 +10,7 @@ function scrollToBottom() {
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    loadDraftMessage(); // Loading the draft message.
-    scrollToBottom(); // Scroll to bottom when page loads
-});
-
-// Handling the adding the Emojis to the message
+// Handling the adding the Emojis to the message and saving draft message
 function insertEmoji(emoji) {
     let input = document.getElementById("messageContent");
     input.value += emoji;
@@ -25,6 +20,13 @@ function insertEmoji(emoji) {
 $(document).ready(function(){
     $('[data-bs-toggle="tooltip"]').tooltip();
 });
+
+/* js from editMessage.html */
+// Handling the adding the Emojis to the message
+function insertEmojiEdit(emoji) {
+    let input = document.getElementById("messageContent");
+    input.value += emoji;
+}
 
 /* js from createGroupChat.html */
 // Saving the group chat name input using session
