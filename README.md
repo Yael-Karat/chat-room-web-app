@@ -66,3 +66,6 @@ The chat room screen that shows the chat lists has an indicator that shows wheth
 Messages can be sent both to users who are currently logged-in and to those who are not.
 You can create a group chat by choosing a unique group name and selecting at least 2 users from the list of all registered users.
 In the chat, you can send messages that include free text and emojis from the application's range of emojis, you can edit the messages you sent (within the delay time - until the option is not displayed), you can delete the message you sent, and you can like or un-like messages sent by other users.
+
+JavaDoc:
+[JavaDoc Documentation](doc/index.html)
