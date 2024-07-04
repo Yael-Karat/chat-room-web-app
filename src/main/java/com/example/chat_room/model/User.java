@@ -27,6 +27,9 @@ public class User {
     )
     private List<Chat> chats = new ArrayList<>();
 
+    @Column(nullable = false)
+    private boolean online;
+
     // Getters and setters
 
     public Long getId() {
@@ -61,4 +64,11 @@ public class User {
         this.chats = chats;
     }
 
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
 }
