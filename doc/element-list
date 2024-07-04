@@ -1,0 +1,6 @@
+com.example.chat_room
+com.example.chat_room.config
+com.example.chat_room.controller
+com.example.chat_room.model
+com.example.chat_room.repository
+com.example.chat_room.service
