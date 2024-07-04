@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Edit Message</title>
@@ -9,47 +9,16 @@
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-  <style>
-    body {
-      background-image: url('/images/background.jpg'); /* Adjust the path to your background image */
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-    }
-
-    .edit-container {
-      max-width: 600px;
-      margin: 100px auto;
-      padding: 30px;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-label {
-      font-weight: bold;
-    }
-
-    .emoji-picker {
-      margin-top: 10px;
-    }
-
-    .btn-custom {
-      width: 100%;
-      margin-top: 10px;
-    }
-  </style>
+  <script src="/js/scripts.js"></script>
 </head>
 <body>
-<div class="container edit-container">
+<div class="form-container">
   <h1 class="text-center mb-4">Edit Message</h1>
   <form th:action="@{/chat/{chatId}/message/{messageId}/edit(chatId=${message.chat.id}, messageId=${message.id})}" method="post">
     <div class="mb-3">
       <label for="messageContent" class="form-label">New Message Content:</label>
       <input type="text" id="messageContent" name="messageContent" class="form-control" th:value="${message.content}" required>
     </div>
-
-    <!-- Emoji Picker -->
     <div class="emoji-picker">
       <button type="button" class="btn btn-outline-secondary" onclick="insertEmoji('😀')">😀</button>
       <button type="button" class="btn btn-outline-secondary" onclick="insertEmoji('😂')">😂</button>
@@ -57,22 +26,9 @@
       <button type="button" class="btn btn-outline-secondary" onclick="insertEmoji('😎')">😎</button>
       <button type="button" class="btn btn-outline-secondary" onclick="insertEmoji('😭')">😭</button>
     </div>
-
-    <button type="submit" class="btn btn-primary btn-custom">Save</button>
+    <button type="submit" class="btn btn-primary btn-custom-2">Save</button>
   </form>
-  <button th:onclick="'location.href=\'/chat/' + ${message.chat.id} + '\';'" class="btn btn-secondary btn-custom">Back to Chat</button>
+  <button th:onclick="'location.href=\'/chat/' + ${message.chat.id} + '\';'" class="btn btn-secondary btn-custom-2">Back to Chat</button>
 </div>
-
-<script>
-  function insertEmoji(emoji) {
-    let input = document.getElementById("messageContent");
-    input.value += emoji;
-  }
-
-  // Initialize tooltips
-  $(document).ready(function(){
-    $('[data-bs-toggle="tooltip"]').tooltip();
-  });
-</script>
 </body>
 </html>

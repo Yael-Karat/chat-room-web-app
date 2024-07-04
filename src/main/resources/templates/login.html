@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -9,34 +9,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <style>
-        .form-container {
-            max-width: 600px; /* Increase this value to make the form wider */
-            margin: 100px auto;
-            padding: 30px; /* Increase padding for a bigger form appearance */
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-label {
-            font-size: 1.2em; /* Increase label font size */
-        }
-        .form-control {
-            font-size: 1.2em; /* Increase input font size */
-            padding: 10px; /* Increase padding for inputs */
-        }
-        .btn {
-            font-size: 1.2em; /* Increase button font size */
-        }
-        .error-message {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
-<div class="container form-container">
+<div class="form-container">
     <h2 class="mb-4">Login</h2>
     <form th:action="@{/login}" method="post">
         <div class="mb-3">
