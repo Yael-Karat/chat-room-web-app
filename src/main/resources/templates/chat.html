@@ -69,6 +69,7 @@
         <a href="/chatroom" class="btn btn-secondary mt-3">Back to Chatroom</a>
     </div>
 </div>
+<audio id="notificationSound" src="/sounds/notification.mp3" preload="auto"></audio>
 <script>
     // Saving the group chat name input using Local Storage
     function saveDraftMessage() {
@@ -91,6 +92,14 @@
     document.addEventListener('DOMContentLoaded', function() {
         loadDraftMessage(); // Loading the draft message.
         scrollToBottom(); // Scroll to bottom when page loads
+
+        // Playing notification sound if there are new messages
+        let lastMessageCount = parseInt(sessionStorage.getItem('lastMessageCount')) || 0;
+        let currentMessageCount = document.querySelectorAll('.chat-message').length;
+        if (currentMessageCount > lastMessageCount) {
+            document.getElementById('notificationSound').play();
+        }
+        sessionStorage.setItem('lastMessageCount', currentMessageCount);
     });
 
     // Clearing the group chat name from Local Storage when done
@@ -98,6 +107,19 @@
         const chatId = [[${chat.id}]];
         const userId = [[${currentUser.id}]];
         localStorage.removeItem('draftMessage_' + userId + '_' + chatId);
+    }
+
+    // Scrolling to bottom when page loads completely
+    function scrollToBottom() {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Handling the adding the Emojis to the message and saving draft message
+    function insertEmoji(emoji) {
+        let input = document.getElementById("messageContent");
+        input.value += emoji;
+        saveDraftMessage();
     }
 </script>
 </body>
