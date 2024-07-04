@@ -1,5 +1,7 @@
 package com.example.chat_room.config;
 
+import com.example.chat_room.service.UserStatusService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,6 +16,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private final CustomLoginRedirectFilter customLoginRedirectFilter;
+
+    @Autowired
+    private UserStatusService userStatusService;
 
     public WebSecurityConfig(CustomLoginRedirectFilter customLoginRedirectFilter) {
         this.customLoginRedirectFilter = customLoginRedirectFilter;
@@ -34,13 +39,23 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
+                        .failureUrl("/login?error=true") // Redirect to login with error parameter on failure
                         .defaultSuccessUrl("/chatroom", true)
                         .permitAll()
+                        .successHandler((request, response, authentication) -> {
+                            userStatusService.setUserOnline(authentication.getName());
+                            response.sendRedirect("/chatroom");
+                        })
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login")
                         .permitAll()
+                        .addLogoutHandler((request, response, authentication) -> {
+                            if (authentication != null) {
+                                userStatusService.setUserOffline(authentication.getName());
+                            }
+                        })
                 )
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection for simplicity in development
                 .addFilterBefore(customLoginRedirectFilter, UsernamePasswordAuthenticationFilter.class); // Add custom filter
