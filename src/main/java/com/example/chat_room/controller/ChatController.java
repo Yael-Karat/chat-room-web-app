@@ -437,7 +437,7 @@ public class ChatController {
         for (Message message : messages) {
             message.setFormattedTimestamp(message.getTimestamp().format(DateTimeFormatter.ofPattern("HH:mm")));
             readMessageService.markMessageAsRead(currentUser, message);
-            if (message.getSender().equals(currentUser) && Duration.between(message.getTimestamp(), LocalDateTime.now()).toMinutes() < 2) {
+            if (message.getSender().equals(currentUser) && Duration.between(message.getTimestamp(), LocalDateTime.now()).toMinutes() < 5) {
                 editableMessageIds.add(message.getId());
             }
         }
