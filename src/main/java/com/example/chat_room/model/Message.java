@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a message.
+ */
 @Entity
 @Table(name = "messages")
 public class Message {

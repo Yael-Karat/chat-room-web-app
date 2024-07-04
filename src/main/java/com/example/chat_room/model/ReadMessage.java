@@ -1,8 +1,10 @@
-// ReadMessage.java
 package com.example.chat_room.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Entity representing a read message.
+ */
 @Entity
 @Table(name = "read_messages")
 public class ReadMessage {

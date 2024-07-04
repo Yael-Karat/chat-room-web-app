@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for Message entity.
+ */
 @Repository
 public interface MessageRepository extends CrudRepository<Message, Long> {
     Optional<Message> findTopByChatIdAndSenderIdOrderByTimestampDesc(Long chatId, Long senderId);

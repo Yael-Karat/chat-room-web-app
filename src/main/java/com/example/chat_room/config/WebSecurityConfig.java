@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration class for web security.
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -24,11 +27,23 @@ public class WebSecurityConfig {
         this.customLoginRedirectFilter = customLoginRedirectFilter;
     }
 
+    /**
+     * Bean for password encoding.
+     *
+     * @return BCryptPasswordEncoder
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Configures the security filter chain.
+     *
+     * @param http the HttpSecurity configuration
+     * @return SecurityFilterChain
+     * @throws Exception if an error occurs
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -39,7 +54,7 @@ public class WebSecurityConfig {
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .failureUrl("/login?error=true") // Redirect to login with error parameter on failure
+                        .failureUrl("/login?error=true")
                         .defaultSuccessUrl("/chatroom", true)
                         .permitAll()
                         .successHandler((request, response, authentication) -> {
@@ -57,8 +72,8 @@ public class WebSecurityConfig {
                             }
                         })
                 )
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection for simplicity in development
-                .addFilterBefore(customLoginRedirectFilter, UsernamePasswordAuthenticationFilter.class); // Add custom filter
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(customLoginRedirectFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

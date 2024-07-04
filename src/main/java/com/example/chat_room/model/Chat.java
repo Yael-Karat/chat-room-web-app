@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Entity representing a chat.
+ */
 @Entity
 @Table(name = "chats")
 public class Chat {
@@ -59,7 +61,12 @@ public class Chat {
     public Chat() {
     }
 
-    // Helper method to get the other user in a private chat
+    /**
+     * Helper method to get the other user in a private chat.
+     *
+     * @param currentUser the current user
+     * @return the other user in the chat
+     */
     public User getOtherUser(User currentUser) {
         return users.stream().filter(user -> !user.equals(currentUser)).findFirst().orElse(null);
     }

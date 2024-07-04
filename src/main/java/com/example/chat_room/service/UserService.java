@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for handling user-related operations.
+ */
 @Service
 public class UserService {
 
@@ -23,11 +26,15 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**
+     * Saves a user entity and creates private chats with existing users.
+     *
+     * @param user the user entity to save
+     */
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
 
-        // Create chat with existing users
         Iterable<User> users = userRepository.findAll();
         for (User existingUser : users) {
             if (!existingUser.getUsername().equals(user.getUsername())) {
@@ -36,24 +43,41 @@ public class UserService {
                 chat.getUsers().add(user);
                 chatRepository.save(chat);
 
-                // Add the chat to the users
                 existingUser.getChats().add(chat);
                 user.getChats().add(chat);
 
                 userRepository.save(existingUser);
             }
         }
-        userRepository.save(user); // Save the user again to persist the chat relationships
+        userRepository.save(user);
     }
 
+    /**
+     * Retrieves a user by their username.
+     *
+     * @param username the username of the user
+     * @return the user entity if found
+     */
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Checks if a username already exists.
+     *
+     * @param username the username to check
+     * @return true if the username exists, false otherwise
+     */
     public boolean usernameExists(String username) {
         return userRepository.findByUsername(username) != null;
     }
 
+    /**
+     * Suggests an alternative username.
+     *
+     * @param username the base username
+     * @return a suggested alternative username
+     */
     public String suggestUsername(String username) {
         String suggestedUsername;
         int counter = 1;
@@ -64,10 +88,21 @@ public class UserService {
         return suggestedUsername;
     }
 
+    /**
+     * Retrieves all users.
+     *
+     * @return a list of all users
+     */
     public List<User> findAllUsers() {
         return (List<User>) userRepository.findAll();
     }
 
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param id the ID of the user
+     * @return the user entity if found
+     */
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.orElse(null);

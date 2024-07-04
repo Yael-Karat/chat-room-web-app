@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository interface for Chat entity.
+ */
 @Repository
 public interface ChatRepository extends CrudRepository<Chat, Long> {
     Optional<Chat> findByName(String name);
