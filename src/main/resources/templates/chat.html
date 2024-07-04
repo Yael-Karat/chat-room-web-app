@@ -88,7 +88,12 @@
         }
     }
 
-    // Clearing the group chat name from Local Storage storage when done
+    document.addEventListener('DOMContentLoaded', function() {
+        loadDraftMessage(); // Loading the draft message.
+        scrollToBottom(); // Scroll to bottom when page loads
+    });
+
+    // Clearing the group chat name from Local Storage when done
     function clearDraftMessage() {
         const chatId = [[${chat.id}]];
         const userId = [[${currentUser.id}]];
