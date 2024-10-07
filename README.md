@@ -1,13 +1,10 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/e99KNix9)
-
 ## Authors
-<h1>Yael Karat</h1>
-<p>Email: yaelkara@edu.hac.ac.il</p>
+<p>
+  <span><strong>Amit Lap & Yael Karat</strong></span>
+  (<a href="https://github.com/Yael-Karat">@Yael-Karat</a>)
+</p>
 
-<h1>Amit Lap</h1>
-<p>Email: amitlap@edu.hac.ac.il</p>
-
-# Chat Room Application
+## Chat Room Application
 
 We choose to develop a Chat Room application - Our application combines robust backend functionality with a friendly and Responsive UI to provide a seamless and interactive chat experience. The use of Spring Boot, Spring Security, Thymeleaf, and Bootstrap Ensures the application is secure, maintainable and enhances the UX.
 
@@ -55,7 +52,7 @@ Our Chat Room application is a web-based chat platform built using the Spring Bo
 
 ## How do you run the application
 In application.properties we defined as follows: spring.datasource.url=jdbc:mysql://localhost:3306/ex5?serverTimezone=UTC
-We will start the MySQL server first.
+<span><p>We will start the MySQL server first.</span></p>
 The database needs to be configured with this: utf8mb4_general_ci to be able to store emojis.
 Then we will Run the application in intellij.
 For a seamless and interactive chat experience a browser should be opened for each user at the same time (at least 3 is recommended for a group chat experience later on).
@@ -66,9 +63,3 @@ The chat room screen that shows the chat lists has an indicator that shows wheth
 Messages can be sent both to users who are currently logged-in and to those who are not.
 You can create a group chat by choosing a unique group name and selecting at least 2 users from the list of all registered users.
 In the chat, you can send messages that include free text and emojis from the application's range of emojis, you can edit the messages you sent (within the delay time - until the option is not displayed), you can delete the message you sent, and you can like or un-like messages sent by other users.
-
-# JavaDoc:
-[JavaDoc Documentation](doc/index.html)
-
-# Demo Video:
-Saved in the repo under the main directory.
