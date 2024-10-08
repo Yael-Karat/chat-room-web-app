@@ -1,8 +1,8 @@
+# <img src="https://github.com/user-attachments/assets/4622f94d-0a5d-464b-81a5-9c1bd7c9fef2" alt="HgfGIF" style="width: 100px; height: auto;"> Chat Room Application
+We choose to develop a Chat Room application - Our application combines robust backend functionality with a friendly and Responsive UI to provide a seamless and interactive chat experience. The use of Spring Boot, Spring Security, Thymeleaf, and Bootstrap Ensures the application is secure, maintainable and enhances the UX.
+
 ## Authors
 **Amit Lap** & **Yael Karat** - [@Yael-Karat](https://github.com/Yael-Karat)
-
-## Chat Room Application
-We choose to develop a Chat Room application - Our application combines robust backend functionality with a friendly and Responsive UI to provide a seamless and interactive chat experience. The use of Spring Boot, Spring Security, Thymeleaf, and Bootstrap Ensures the application is secure, maintainable and enhances the UX.
 
 ## General Functionality
 Our Chat Room application is a web-based chat platform built using the Spring Boot MVC framework. The application leverages Thymeleaf for server-side rendering of HTML views, and Spring Security for user authentication and session management. It provides a platform for users to create accounts, log in, and engage in both private and group chats. Below is a detailed description of the general functionalities provided by the application:
